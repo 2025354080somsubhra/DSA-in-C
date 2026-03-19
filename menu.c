@@ -28,7 +28,7 @@ void insert(int LA[], int *N, int K, int ITEM)
     printf("Element inserted successfully\n");
 }
 
-void delete(int LA[], int *N, int K)
+void deleteElement(int LA[], int *N, int K)
 {
     int j;
 
@@ -48,53 +48,100 @@ void delete(int LA[], int *N, int K)
 
 void display(int LA[], int N)
 {
+    if(N == 0) {
+        printf("Array is empty\n");
+        return;
+    }
+
+    printf("Array elements: ");
     for(int i = 0; i < N; i++) {
         printf("%d ", LA[i]);
     }
     printf("\n");
 }
 
-int main()
+void linearSearch(int LA[], int N, int ITEM)
 {
-    int Arr[MAX] = {1,2,3,4,5};
-    int N = 5;
-    int choice, ITEM, K;
+    int LOC = -1;
 
-    printf("Data Structure \n");
-    printf("1. Insert Element\n");
-    printf("2. Delete Element\n");
-    printf("3. Display Array\n");
-    printf("Enter your choice: ");
-    scanf("%d",&choice);
-
-    switch(choice)
-    {
-        case 1:
-            printf("Enter position: ");
-            scanf("%d",&K);
-
-            printf("Enter item: ");
-            scanf("%d",&ITEM);
-
-            insert(Arr, &N, K, ITEM);
-            display(Arr, N);
+    for(int i = 0; i < N; i++) {
+        if(LA[i] == ITEM) {
+            LOC = i;
             break;
-
-        case 2:
-            printf("Enter position to delete: ");
-            scanf("%d",&K);
-
-            delete(Arr, &N, K);
-            display(Arr, N);
-            break;
-
-        case 3:
-            display(Arr, N);
-            break;
-
-        default:
-            printf("Invalid choice\n");
+        }
     }
 
+    if(LOC == -1) {
+        printf("Item not found\n");
+    } else {
+        printf("Item found at position %d\n", LOC);
+    }
+}
+
+void menu()
+{
+    printf("Array Operations \n");
+    printf("1. Insert Element\n");
+    printf("2. Delete Element\n");
+    printf("3. Linear Search\n");
+    printf("4. Display Array\n");
+    printf("5. Exit\n");
+    printf("Enter your choice: ");
+}
+
+void runner(int Arr[], int *N)
+{
+    int choice, ITEM, K;
+
+    do {
+        menu();
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+            case 1:
+                printf("Enter position (0-based index): ");
+                scanf("%d", &K);
+
+                printf("Enter item: ");
+                scanf("%d", &ITEM);
+
+                insert(Arr, N, K, ITEM);
+                break;
+
+            case 2:
+                printf("Enter position to delete: ");
+                scanf("%d", &K);
+
+                deleteElement(Arr, N, K);
+                break;
+
+            case 3:
+                printf("Enter element to search: ");
+                scanf("%d", &ITEM);
+
+                linearSearch(Arr, *N, ITEM);
+                break;
+
+            case 4:
+                display(Arr, *N);
+                break;
+
+            case 5:
+                printf("Exiting program...\n");
+                break;
+
+            default:
+                printf("Invalid choice\n");
+        }
+
+    } while(choice != 5);
+}
+
+int main()
+{
+    int Arr[MAX] = {1, 2, 3, 4, 5};
+    int N = 5;
+    runner(Arr, &N);
     return 0;
 }
