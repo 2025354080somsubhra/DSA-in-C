@@ -74,13 +74,13 @@ void linearSearch(int LA[], int N, int ITEM)
     if(LOC == -1) {
         printf("Item not found\n");
     } else {
-        printf("Item found at position %d\n", LOC);
+        printf("Item found at location %d\n", LOC);
     }
 }
 
 void menu()
 {
-    printf("Array Operations \n");
+    printf("Linked List Operations \n");
     printf("1. Insert Element\n");
     printf("2. Delete Element\n");
     printf("3. Linear Search\n");
@@ -100,7 +100,7 @@ void runner(int Arr[], int *N)
         switch(choice)
         {
             case 1:
-                printf("Enter position (0-based index): ");
+                printf("Enter position : ");
                 scanf("%d", &K);
 
                 printf("Enter item: ");
@@ -128,7 +128,7 @@ void runner(int Arr[], int *N)
                 break;
 
             case 5:
-                printf("Exiting program...\n");
+                printf("Exited\n");
                 break;
 
             default:
@@ -138,8 +138,7 @@ void runner(int Arr[], int *N)
     } while(choice != 5);
 }
 
-int main()
-{
+int main() {
     int Arr[MAX] = {1, 2, 3, 4, 5};
     int N = 5;
     runner(Arr, &N);
