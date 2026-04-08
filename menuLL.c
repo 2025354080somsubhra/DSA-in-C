@@ -138,7 +138,7 @@ void mid_len() {
 int main() {
     int choice;
 
-    printf("WELCOME TO LINKED LIST MENU PROGRAM\n");
+    printf("Linked List Functions using Switch Case\n");
 
     while(1) {
         printf("\n Linked List Operations \n");
