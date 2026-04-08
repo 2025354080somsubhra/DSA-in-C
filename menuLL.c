@@ -13,14 +13,14 @@ n *Tail = NULL;
 
 
 void append() {
-    int k, val;
+    int k, j;
 
     printf("How many elements you want to add: ");
     scanf("%d", &k);
 
     for(int i = 0; i < k; i++) {
         printf("Enter value %d: ", i + 1);
-        scanf("%d", &val);
+        scanf("%d", &j);
 
         n *temp = (n *) malloc(sizeof(n));
         if(temp == NULL) {
@@ -28,7 +28,7 @@ void append() {
             return;
         }
 
-        temp->data = val;
+        temp->data = j;
         temp->link = NULL;
 
         if(Head == NULL) {
