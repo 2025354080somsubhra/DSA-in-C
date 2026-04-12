@@ -10,19 +10,28 @@ typedef struct Node n;
 
 n *head = NULL;
 
-void createLL(int val) {
-    n *newNode = (n*) malloc(sizeof(n));
-    newNode->data = val;
-    newNode->link = NULL;
+void createLL() {
+    int ele, tt;
+    printf("Enter total elements: ");
+    scanf("%d",&tt);
 
-    if(head == NULL) {
-        head = newNode;
-    } else {
-        n *temp = head;
-        while(temp->link != NULL) {
-            temp = temp->link;
+    for(int i=0; i<tt; i++) {
+        printf("Enter value %d: ", i+1);
+        scanf("%d",&ele);
+
+        n *newNode = (n*) malloc(sizeof(n));
+        newNode->data = ele;
+        newNode->link = NULL;
+
+        if(head == NULL) {
+            head = newNode;
+        } else {
+            n *temp = head;
+            while(temp->link != NULL) {
+                temp = temp->link;
+            }
+            temp->link = newNode;
         }
-        temp->link = newNode;
     }
 }
 
@@ -48,7 +57,19 @@ void insertFirst(int val) {
 }
 
 void insertLast(int val) {
-    createLL(val);
+    n *newNode = (n*) malloc(sizeof(n));
+    newNode->data = val;
+    newNode->link = NULL;
+
+    if(head == NULL) {
+        head = newNode;
+    } else {
+        n *temp = head;
+        while(temp->link != NULL) {
+            temp = temp->link;
+        }
+        temp->link = newNode;
+    }
 }
 
 void insertPos(int val, int pos) {
@@ -138,12 +159,22 @@ void deletePos(int pos) {
     free(del);
 }
 
+int count() {
+    int c = 0;
+    n *temp = head;
+    while(temp != NULL) {
+        c++;
+        temp = temp->link;
+    }
+    return c;
+}
+
 int main() {
-    int choice, val, pos;
+    int ch, val, pos;
 
     while(1) {
-        printf("Linked List, choose one option from below");
-        printf("1. Create (Insert End)\n");
+        printf("Linked List Menu\n");
+        printf("1. Create\n");
         printf("2. Display\n");
         printf("3. Insert First\n");
         printf("4. Insert Last\n");
@@ -151,16 +182,15 @@ int main() {
         printf("6. Delete First\n");
         printf("7. Delete Last\n");
         printf("8. Delete Position\n");
-        printf("9. Exit\n");
+        printf("9. Count Node\n");
+        printf("10. Exit\n");
 
-        printf("Enter choice: ");
-        scanf("%d", &choice);
+        printf("\n Enter choice: ");
+        scanf("%d", &ch);
 
-        switch(choice) {
+        switch(ch) {
             case 1:
-                printf("Enter value: ");
-                scanf("%d", &val);
-                createLL(val);
+                createLL();
                 break;
 
             case 2:
@@ -199,7 +229,13 @@ int main() {
                 deletePos(pos);
                 break;
 
-            case 9:
+            case 9: {
+                int b = count();
+                printf("Number of nodes: %d\n", b);
+                break;
+            }
+
+            case 10:
                 exit(0);
 
             default:
