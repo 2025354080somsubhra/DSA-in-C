@@ -1,110 +1,106 @@
-// #include<stdio.h>
+// Update Menu Driven Array Program
 
-// int main() {
-//     int marks[3];
-//     printf("physics :");
-//     scanf("%d",&marks[0]);
-
-//     printf("chem:");
-//     scanf("%d",&marks[1]);
-
-//     printf("math:");
-//     scanf("%d");
-
-//     printf("physics= %d,",marks[0]);
-//     printf("chem = %d,", marks[1]);
-//     printf("math = %d\n",marks[2]);
-//     return 0;
-// }
-
-// // Pointer Arithmetic
-// #include<stdio.h>
-
-// int main() {
-//     int age = 22;
-//     int *ptr = &age;
-    
-//     int _age = 25;
-//     int *_ptr = &_age;
-
-//     printf("%u\n",ptr);
-//     ptr++;
-//     printf("%u\n",ptr);
-//     ptr--;
-//     printf("%u\n",ptr);
-//     ptr = ptr-ptr;
-//     printf("%u\n",ptr);
-
-//     ptr = &age;
-//     printf("%d\n",ptr == _ptr);
-
-//     return 0;
-// }
-
-// #include<stdio.h>
-
-// int main() {
-//     int marks[3];
-//     printf("physics :");
-//     scanf("%d",&marks[0]);
-
-//     printf("chem :");
-//     scanf("%d",&marks[1]);
-
-//     printf("math :");
-//     scanf("%d",&marks[2]);
-
-//     printf("physics =%d,",marks[0]);
-//     printf("chem = %d,",marks[1]);
-//     printf("math = %d\n", marks[2]);
-//     return 0;
-// }
+#include <stdio.h>
 
 
-// #include <stdio.h>
+void inputArray(int arr[], int n)
+{
+    int i;
+    printf("Enter %d elements:\n", n);
+    for (i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+}
 
-// int main() {
-//     int arr[5];  // Declare an array of size 5
-//     int i;
+int findSum(int arr[], int n)
+{
+    int i, sum = 0;
+    for (i = 0; i < n; i++)
+        sum += arr[i];
+    return sum;
+}
 
-//     // Input values using for loop
-//     for(i = 0; i < 5; i++) {
-//         printf("Enter value for arr[%d]: ", i);
-//         scanf("%d", &arr[i]);
-//     }
+int findMin(int arr[], int n)
+{
+    int i, min = arr[0];
+    for (i = 1; i < n; i++)
+        if (arr[i] < min)
+            min = arr[i];
+    return min;
+}
 
-//     // Display values
-//     printf("You entered: ");
-//     for(i = 0; i < 5; i++) {
-//         printf("%d ", arr[i]);
-//     }
+int findMax(int arr[], int n)
+{
+    int i, max = arr[0];
+    for (i = 1; i < n; i++)
+        if (arr[i] > max)
+            max = arr[i];
+    return max;
+}
 
-//     return 0;
-// }
+int findAvg(int arr[], int n)
+{
+    int sum = findSum(arr, n);
+    return sum / n;
+}
 
+int menu()
+{
+    int choice;
+    printf("MENU \n");
+    printf("1. Sum \n");
+    printf("2. Minimum \n");
+    printf("3. Maximum \n" );
+    printf("4. Average \n");
+    printf("5. Exit \n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+    return choice;
+}
 
-// #include <stdio.h>
+int main()
+{
+    int arr[100], n, choice, result;
 
-// int main() {
-//     int arr[5] = {10, 20, 30, 40, 50};
-//     int search, i, found = 0;
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
 
-//     printf("Enter element to search: ");
-//     scanf("%d", &search);
+    inputArray(arr, n);   
 
-//     // Linear search
-//     for(i = 0; i < 5; i++) {
-//         if(arr[i] == search) {
-//             printf("Element found at index %d\n", i);
-//             found = 1;
-//             break;  // stop once found
-//         }
-//     }
+    do
+    {
+        choice = menu();
 
-//     if(found == 0) {
-//         printf("Element not found in array\n");
-//     }
+        switch (choice)
+        {
+            case 1:
+                result = findSum(arr, n);
+                printf("Sum = %d", result);
+                break;
 
-//     return 0;
-// }
+            case 2:
+                result = findMin(arr, n);
+                printf("Minimum = %d", result);
+                break;
 
+            case 3:
+                result = findMax(arr, n);
+                printf("Maximum = %d", result);
+                break;
+
+            case 4:
+                result = findAvg(arr, n);
+                printf("Average = %d", result);
+                break;
+
+            case 5:
+                printf("Exiting program...");
+                break;
+
+            default:
+                printf("Invalid choice! Try again.");
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
