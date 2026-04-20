@@ -1,165 +1,172 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node {
+struct Node {
     int data;
-    struct node *link;
+    struct Node *link;
 };
-
-typedef struct node n;
+typedef struct Node n;
 
 n *head = NULL;
 
-// Create circular linked list
-void createLL() {
-    n *new, *temp = NULL;
-    int p = 0;
-    do {
-        new = (n *) malloc(sizeof(n));
-        if (!new) {
-            printf("Memory allocation failed!\n");
-            return;
-        }
-        printf("Enter the element: ");
-        scanf("%d", &new->data);
-        new->link = NULL;
+void createLL(int tt) {
+    for(int i=0; i<tt; i++) {
+        int ele;
+        printf("Enter value %d: ", i+1);
+        scanf("%d",&ele);
 
-        if (head == NULL) {
-            head = temp = new;
-            new->link = head;  // circular
+        n *newNode = (n*) malloc(sizeof(n));
+        newNode->data = ele;
+
+        if(head == NULL) {
+            head = newNode;
+            head->link = head;   // circular
         } else {
-            temp->link = new;
-            temp = new;
-            temp->link = head;
+            n *temp = head;
+            while(temp->link != head) {
+                temp = temp->link;
+            }
+            temp->link = newNode;
+            newNode->link = head;
         }
-
-        printf("Enter 0 to Continue, 1 to Exit: ");
-        scanf("%d", &p);
-    } while (p == 0);
+    }
 }
 
-// Display circular linked list
-void display() {
-    if (head == NULL) {
-        printf("List is Empty\n");
+void displayLL() {
+    if(head == NULL) {
+        printf("List is empty\n");
         return;
     }
     n *temp = head;
     do {
         printf("%d -> ", temp->data);
         temp = temp->link;
-    } while (temp != head);
-    printf("(back to head)\n");
+    } while(temp != head);
+    printf("(head)\n");
 }
 
-// Insert at position
-void insertAtPos(int data, int pos) {
-    n *new = (n *) malloc(sizeof(n));
-    if (!new) {
-        printf("Memory allocation failed!\n");
-        return;
-    }
-    new->data = data;
-    new->link = NULL;
+void insertPos(int val, int pos) {
+    n *newNode = (n*) malloc(sizeof(n));
+    newNode->data = val;
 
-    if (pos == 1) {
-        if (head == NULL) {
-            head = new;
-            new->link = head;
-        } else {
-            n *temp = head;
-            while (temp->link != head) temp = temp->link;
-            temp->link = new;
-            new->link = head;
-            head = new;
+    if(pos == 1) {
+        // Insert at beginning
+        n *last = head;
+        while(last->link != head) {
+            last = last->link;
         }
+        newNode->link = head;
+        last->link = newNode;
+        head = newNode;
         return;
     }
 
     n *temp = head;
-    for (int i = 1; i < pos - 1 && temp->link != head; i++) {
+    for(int i=1; i<pos-1; i++) {
         temp = temp->link;
+        if(temp == head) {
+            printf("Out of range\n");
+            free(newNode);
+            return;
+        }
     }
-    new->link = temp->link;
-    temp->link = new;
+    newNode->link = temp->link;
+    temp->link = newNode;
 }
 
-// Delete at position
-void deleteAtPos(int pos) {
-    if (head == NULL) {
-        printf("List is empty.\n");
+void deletePos(int pos) {
+    if(head == NULL) {
+        printf("List is empty\n");
         return;
     }
 
-    n *temp = head, *prev = NULL;
-
-    // Case 1: Delete head
-    if (pos == 1) {
-        if (head->link == head) { // only one node
+    if(pos == 1) {
+        if(head->link == head) { // only one node
             free(head);
             head = NULL;
         } else {
             n *last = head;
-            while (last->link != head) last = last->link;
-            last->link = head->link;
-            temp = head;
+            while(last->link != head) {
+                last = last->link;
+            }
+            n *temp = head;
             head = head->link;
+            last->link = head;
             free(temp);
         }
         return;
     }
 
-    // Case 2: Delete middle/last
-    for (int i = 1; i < pos && temp->link != head; i++) {
-        prev = temp;
+    n *temp = head;
+    for(int i=1; i<pos-1; i++) {
         temp = temp->link;
-    }
-
-    if (prev != NULL) {
-        prev->link = temp->link;
-        free(temp);
-    }
-}
-
-// Main with switch-case menu
-int main() {
-    int choice, data, pos;
-
-    while (1) {
-        printf("\n--- Circular Linked List Menu ---\n");
-        printf("1. Create List\n");
-        printf("2. Display List\n");
-        printf("3. Insert at Position\n");
-        printf("4. Delete at Position\n");
-        printf("5. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-
-        switch (choice) {
-            case 1:
-                createLL();
-                break;
-            case 2:
-                display();
-                break;
-            case 3:
-                printf("Enter data: ");
-                scanf("%d", &data);
-                printf("Enter position: ");
-                scanf("%d", &pos);
-                insertAtPos(data, pos);
-                break;
-            case 4:
-                printf("Enter position to delete: ");
-                scanf("%d", &pos);
-                deleteAtPos(pos);
-                break;
-            case 5:
-                printf("Exiting...\n");
-                exit(0);
-            default:
-                printf("Invalid choice!\n");
+        if(temp->link == head) {
+            printf("Out of range\n");
+            return;
         }
     }
-    return 0;
+
+    n *del = temp->link;
+    if(del == head) {
+        printf("Out of range\n");
+        return;
+    }
+    temp->link = del->link;
+    free(del);
+}
+
+int count() {
+    if(head == NULL) return 0;
+    int c=0;
+    n *temp = head;
+    do {
+        c++;
+        temp = temp->link;
+    } while(temp != head);
+    return c;
+}
+
+int main() {
+    int ch, val, pos, tt;
+
+    while(1) {
+        printf("\nCircular Linked List Menu\n");
+        printf("1. Create\n");
+        printf("2. Display\n");
+        printf("3. Insert at Position\n");
+        printf("4. Delete at Position\n");
+        printf("5. Count Nodes\n");
+        printf("6. Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d",&ch);
+
+        switch(ch) {
+            case 1:
+                printf("Enter total elements: ");
+                scanf("%d",&tt);
+                createLL(tt);
+                break;
+            case 2:
+                displayLL();
+                break;
+            case 3:
+                printf("Enter value and position: ");
+                scanf("%d %d",&val,&pos);
+                insertPos(val,pos);
+                break;
+            case 4:
+                printf("Enter position: ");
+                scanf("%d",&pos);
+                deletePos(pos);
+                break;
+            case 5:
+                printf("Number of nodes: %d\n", count());
+                break;
+            case 6:
+                exit(0);
+            default:
+                printf("Invalid choice\n");
+        }
+    }
 }
