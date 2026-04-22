@@ -81,19 +81,24 @@ void deletePos(int pos) {
     }
 
     if(pos == 1) {
-        if(head->link == head) { // only one node
-            free(head);
-            head = NULL;
-        } else {
-            n *last = head;
-            while(last->link != head) {
-                last = last->link;
-            }
-            n *temp = head;
-            head = head->link;
-            last->link = head;
-            free(temp);
-        }
+        n *last = head;
+// 1. Traverse to the end of the circular list
+while (last->link != head) {
+    last = last->link;
+}
+
+n *temp = head;
+// 2. If head points to itself, it's the last node; set head to NULL
+// Otherwise, move head forward and relink the last node
+if (head == last) {
+    head = NULL;
+} else {
+    head = head->link;
+    last->link = head;
+}
+
+free(temp);
+
         return;
     }
 
