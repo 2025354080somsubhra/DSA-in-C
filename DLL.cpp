@@ -1,42 +1,78 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node {
+struct Node {
     int data;
-    struct node *prev;
-    struct node *next;
+    struct Node *prev;
+    struct Node *next;
 };
 
-typedef struct node n;
+typedef struct Node n;
 
 n *head = NULL;
 
-// Create a new node
-n* createNode(int data) {
-    n *newNode = (n*) malloc(sizeof(n));
-    newNode->data = data;
-    newNode->prev = NULL;
-    newNode->next = NULL;
-    return newNode;
+// Create doubly linked list
+void createLL() {
+    int ele, tt;
+    printf("Enter total elements: ");
+    scanf("%d", &tt);
+
+    for(int i = 0; i < tt; i++) {
+        printf("Enter value %d: ", i+1);
+        scanf("%d", &ele);
+
+        n *newNode = (n*) malloc(sizeof(n));
+        newNode->data = ele;
+        newNode->prev = NULL;
+        newNode->next = NULL;
+
+        if(head == NULL) {
+            head = newNode;
+        } else {
+            n *temp = head;
+            while(temp->next != NULL) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+            newNode->prev = temp;
+        }
+    }
+}
+
+// Display list
+void displayLL() {
+    if(head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    n *temp = head;
+    while(temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
 }
 
 // Insert at position
-void insertAtPos(int data, int pos) {
-    n *newNode = createNode(data);
+void insertPos(int val, int pos) {
+    n *newNode = (n*) malloc(sizeof(n));
+    newNode->data = val;
+    newNode->prev = NULL;
+    newNode->next = NULL;
 
-    if (pos == 1) {  // insert at beginning
+    if(pos == 1) {
         newNode->next = head;
-        if (head != NULL) head->prev = newNode;
+        if(head != NULL) head->prev = newNode;
         head = newNode;
         return;
     }
 
     n *temp = head;
-    for (int i = 1; i < pos - 1 && temp != NULL; i++) {
+    for(int i = 1; i < pos - 1 && temp != NULL; i++) {
         temp = temp->next;
     }
 
-    if (temp == NULL) {
+    if(temp == NULL) {
         printf("Position out of range!\n");
         free(newNode);
         return;
@@ -44,93 +80,75 @@ void insertAtPos(int data, int pos) {
 
     newNode->next = temp->next;
     newNode->prev = temp;
-    if (temp->next != NULL) temp->next->prev = newNode;
+    if(temp->next != NULL) temp->next->prev = newNode;
     temp->next = newNode;
 }
 
 // Delete at position
-void deleteAtPos(int pos) {
-    if (head == NULL) {
-        printf("List is empty.\n");
+void deletePos(int pos) {
+    if(head == NULL) {
+        printf("List is empty\n");
         return;
     }
 
     n *temp = head;
 
-    if (pos == 1) {  // delete head
+    if(pos == 1) {
         head = head->next;
-        if (head != NULL) head->prev = NULL;
-        printf("Deleted %d from position 1.\n", temp->data);
+        if(head != NULL) head->prev = NULL;
         free(temp);
         return;
     }
 
-    for (int i = 1; i < pos && temp != NULL; i++) {
+    for(int i = 1; i < pos && temp != NULL; i++) {
         temp = temp->next;
     }
 
-    if (temp == NULL) {
+    if(temp == NULL) {
         printf("Position out of range!\n");
         return;
     }
 
-    if (temp->prev != NULL) temp->prev->next = temp->next;
-    if (temp->next != NULL) temp->next->prev = temp->prev;
-
-    printf("Deleted %d from position %d.\n", temp->data, pos);
+    if(temp->prev != NULL) temp->prev->next = temp->next;
+    if(temp->next != NULL) temp->next->prev = temp->prev;
     free(temp);
 }
 
-// Display list forward
-void display() {
-    if (head == NULL) {
-        printf("List is empty.\n");
-        return;
-    }
-    n *temp = head;
-    printf("List: ");
-    while (temp != NULL) {
-        printf("%d -> ", temp->data);
-        temp = temp->next;
-    }
-    printf("NULL\n");
-}
-
-// Main program
 int main() {
-    int choice, data, pos;
+    int ch, val, pos;
 
-    while (1) {
+    while(1) {
         printf("\n--- Doubly Linked List Menu ---\n");
-        printf("1. Insert at Position\n");
-        printf("2. Delete at Position\n");
-        printf("3. Display List\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+        printf("1. Create\n");
+        printf("2. Display\n");
+        printf("3. Insert at Position\n");
+        printf("4. Delete at Position\n");
+        printf("5. Exit\n");
 
-        switch (choice) {
+        printf("Enter choice: ");
+        scanf("%d", &ch);
+
+        switch(ch) {
             case 1:
-                printf("Enter data: ");
-                scanf("%d", &data);
-                printf("Enter position: ");
-                scanf("%d", &pos);
-                insertAtPos(data, pos);
+                createLL();
                 break;
             case 2:
-                printf("Enter position to delete: ");
-                scanf("%d", &pos);
-                deleteAtPos(pos);
+                displayLL();
                 break;
             case 3:
-                display();
+                printf("Enter value and position: ");
+                scanf("%d %d", &val, &pos);
+                insertPos(val, pos);
                 break;
             case 4:
-                printf("Exiting...\n");
+                printf("Enter position: ");
+                scanf("%d", &pos);
+                deletePos(pos);
+                break;
+            case 5:
                 exit(0);
             default:
-                printf("Invalid choice!\n");
+                printf("Invalid choice\n");
         }
     }
-    return 0;
 }
